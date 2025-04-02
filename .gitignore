@@ -10,6 +10,8 @@ node_modules/
 .DS_Store
 */.DS_Store
 
+/release
+
 # 敏感信息
 apikey.txt
 
