@@ -1,0 +1,70 @@
+{
+    "identifier": "com.coulsontl.bob-plugin-gemini-translate",
+    "version": "0.1.0",
+    "category": "translate",
+    "name": "Gemini翻译",
+    "summary": "使用Google Gemini API进行文本翻译",
+    "icon": "110",
+    "author": "coulsontl",
+    "homepage": "https://github.com/coulsontl/bob-plugin-gemini-translate",
+    "appcast": "https://github.com/coulsontl/bob-plugin-gemini-translate/raw/main/appcast.json",
+    "minBobVersion": "1.8.0",
+    "options": [
+        {
+            "identifier": "apiKey",
+            "type": "text",
+            "title": "API Key",
+            "desc": "请输入Google AI Studio的API Key",
+            "textConfig": {
+                "type": "secure"
+            }
+        },
+        {
+            "identifier": "apiBaseUrl",
+            "type": "text",
+            "title": "API Base URL",
+            "desc": "API基础URL，默认为https://generativelanguage.googleapis.com/v1beta",
+            "defaultValue": "https://generativelanguage.googleapis.com/v1beta",
+            "textConfig": {
+                "type": "visible"
+            }
+        },
+        {
+            "identifier": "modelName",
+            "type": "menu",
+            "title": "模型选择",
+            "desc": "选择使用的Gemini模型",
+            "defaultValue": "gemini-2.0-flash",
+            "menuValues": [
+                {
+                    "title": "Gemini 2.0 Flash",
+                    "value": "gemini-2.0-flash"
+                },
+                {
+                    "title": "Gemini 2.5 Pro Exp 03-25",
+                    "value": "gemini-2.5-pro-exp-03-25"
+                }
+            ]
+        },
+        {
+            "identifier": "temperature",
+            "type": "text",
+            "title": "Temperature",
+            "desc": "设置模型的temperature参数(0-1之间)，越低越精确，越高越创意",
+            "defaultValue": "0",
+            "textConfig": {
+                "type": "visible"
+            }
+        },
+        {
+            "identifier": "topP",
+            "type": "text",
+            "title": "Top P",
+            "desc": "设置模型的top_p参数(0-1之间)",
+            "defaultValue": "0.95",
+            "textConfig": {
+                "type": "visible"
+            }
+        }
+    ]
+}
