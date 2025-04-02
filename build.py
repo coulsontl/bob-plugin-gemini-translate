@@ -53,7 +53,7 @@ def update_appcast(version, plugin_path):
     for v in appcast.get("versions", []):
         if v.get("version") == version:
             v["sha256"] = sha256
-            v["url"] = f"https://github.com/mrjoy/bob-plugin-gemini-translate/releases/download/v{version}/{PLUGIN_NAME}.bobplugin"
+            v["url"] = f"https://github.com/coulsontl/bob-plugin-gemini-translate/releases/download/v{version}/{PLUGIN_NAME}.bobplugin"
             v["minBobVersion"] = "1.8.0"
             break
     else:
@@ -63,7 +63,7 @@ def update_appcast(version, plugin_path):
             "version": version,
             "desc": release_notes,
             "sha256": sha256,
-            "url": f"https://github.com/mrjoy/bob-plugin-gemini-translate/releases/download/v{version}/{PLUGIN_NAME}.bobplugin",
+            "url": f"https://github.com/coulsontl/bob-plugin-gemini-translate/releases/download/v{version}/{PLUGIN_NAME}.bobplugin",
             "minBobVersion": "1.8.0"
         })
     
