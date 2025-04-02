@@ -4,8 +4,8 @@
     {
       "version": "0.1.0",
       "desc": "初始版本，支持谷歌Gemini API的流式翻译功能",
-      "sha256": "187d782db63858fdef33694f068720fbee60261be8523e989da992a909bb1f18",
-      "url": "https://github.com/coulsontl/bob-plugin-gemini-translate/releases/download/v0.1.0/bob-plugin-gemini-translate.bobplugin",
+      "sha256": "b710bc0098f3a02705c1359ecbb61e87c9dac8e51f1602ea93418fa432a5f5a3",
+      "url": "https://github.com/mrjoy/bob-plugin-gemini-translate/releases/download/v0.1.0/bob-plugin-gemini-translate.bobplugin",
       "minBobVersion": "1.8.0"
     }
   ]
