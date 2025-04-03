@@ -1,0 +1,70 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Extract version and release notes
+        id: get_version
+        run: |
+          # 从tag中提取版本号（去掉v前缀）
+          VERSION=${GITHUB_REF#refs/tags/v}
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+          
+          # 从tag消息或最近提交消息中提取发布说明
+          if [ -n "${{ github.event.release.body }}" ]; then
+            RELEASE_NOTES="${{ github.event.release.body }}"
+          else
+            RELEASE_NOTES=$(git log -1 --pretty=%B)
+          fi
+          echo "RELEASE_NOTES<<EOF" >> $GITHUB_ENV
+          echo "$RELEASE_NOTES" >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
+
+      - name: Update version in info.json
+        run: |
+          python -c "
+          import json
+          with open('info.json', 'r', encoding='utf-8') as f:
+              info = json.load(f)
+          info['version'] = '${{ env.VERSION }}'
+          with open('info.json', 'w', encoding='utf-8') as f:
+              json.dump(info, f, ensure_ascii=False, indent=4)
+          "
+
+      - name: Build plugin
+        run: |
+          # 设置环境变量供脚本使用
+          export RELEASE_NOTES="${{ env.RELEASE_NOTES }}"
+          
+          # 运行构建脚本（不自动增加版本号，因为已经从tag设置）
+          python build.py --no-open
+
+      - name: Create Release
+        id: create_release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: v${{ env.VERSION }}
+          name: v${{ env.VERSION }}
+          body: ${{ env.RELEASE_NOTES }}
+          draft: false
+          prerelease: false
+          files: |
+            release/bob-plugin-gemini-translate.bobplugin
+            appcast.json
+            info.json
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }} 

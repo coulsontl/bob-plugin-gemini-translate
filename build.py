@@ -8,6 +8,7 @@ import zipfile
 import hashlib
 import datetime
 import subprocess
+import re
 from pathlib import Path
 
 # 配置信息
@@ -29,7 +30,36 @@ def get_version_from_info():
         info = json.load(f)
     return info.get("version", "0.1.0")
 
-def update_appcast(version, plugin_path):
+def increment_version(version_str):
+    """增加版本号，注意小版本号到9之后要升级一个前面的版本号"""
+    # 分解版本号
+    parts = list(map(int, version_str.split('.')))
+    
+    # 增加最后一个部分
+    parts[-1] += 1
+    
+    # 如果最后一部分是10，则将其重置为0，并增加前一部分
+    for i in range(len(parts) - 1, 0, -1):
+        if parts[i] > 9:
+            parts[i] = 0
+            parts[i-1] += 1
+    
+    # 组合版本号
+    return '.'.join(map(str, parts))
+
+def update_version_in_info_json(new_version):
+    """更新info.json中的版本号"""
+    with open("info.json", "r", encoding="utf-8") as f:
+        info = json.load(f)
+    
+    info["version"] = new_version
+    
+    with open("info.json", "w", encoding="utf-8") as f:
+        json.dump(info, f, ensure_ascii=False, indent=4)
+    
+    print(f"✅ 已更新info.json中的版本号为：{new_version}")
+
+def update_appcast(version, plugin_path, release_notes=None):
     """更新appcast.json文件"""
     appcast_path = "appcast.json"
     
@@ -58,7 +88,8 @@ def update_appcast(version, plugin_path):
             break
     else:
         # 添加新版本
-        release_notes = input(f"请输入v{version}版本的更新说明: ") or f"发布{version}版本"
+        if release_notes is None:
+            release_notes = f"发布{version}版本"
         appcast.get("versions", []).insert(0, {
             "version": version,
             "desc": release_notes,
@@ -97,16 +128,41 @@ def build_plugin(version):
     print(f"✅ 插件打包完成: {plugin_path}")
     return plugin_path
 
-def main():
-    # 获取版本号
+def get_github_release_notes(version):
+    """从环境变量或输入获取发布说明"""
+    # 从环境变量获取（供GitHub Actions使用）
+    if 'RELEASE_NOTES' in os.environ:
+        return os.environ['RELEASE_NOTES']
+    
+    # 自动增加版本号时才请求用户输入，否则使用默认说明
+    if "--auto-increment" in sys.argv:
+        return input(f"请输入v{version}版本的更新说明: ") or f"发布{version}版本"
+    else:
+        return f"发布{version}版本"
+
+def auto_release(auto_increment=False, release_notes=None):
+    """自动发布新版本"""
     global VERSION
-    VERSION = get_version_from_info()
+    
+    # 获取当前版本
+    old_version = get_version_from_info()
+    
+    # 如果需要自动增加版本号
+    if auto_increment:
+        VERSION = increment_version(old_version)
+        update_version_in_info_json(VERSION)
+    else:
+        VERSION = old_version
     
     # 打包插件
     plugin_path = build_plugin(VERSION)
     
-    # 更新appcast.json
-    sha256 = update_appcast(VERSION, plugin_path)
+    # 使用提供的发布说明或获取新的
+    if release_notes is None:
+        release_notes = get_github_release_notes(VERSION)
+    
+    # 更新appcast.json (修改函数调用，增加发布说明参数)
+    sha256 = update_appcast(VERSION, plugin_path, release_notes)
     
     print("\n构建信息:")
     print(f"版本号: v{VERSION}")
@@ -114,13 +170,27 @@ def main():
     print(f"SHA256: {sha256}")
     print(f"输出目录: {os.path.abspath(RELEASE_DIR)}")
     
+    return {
+        "version": VERSION,
+        "plugin_path": plugin_path,
+        "sha256": sha256
+    }
+
+def main():
+    # 解析命令行参数
+    auto_increment = "--auto-increment" in sys.argv
+    
+    # 自动发布
+    result = auto_release(auto_increment)
+    
     # 可选：打开输出目录
-    if sys.platform == 'darwin':  # macOS
-        subprocess.run(['open', RELEASE_DIR])
-    elif sys.platform == 'win32':  # Windows
-        os.startfile(RELEASE_DIR)
-    elif sys.platform.startswith('linux'):  # Linux
-        subprocess.run(['xdg-open', RELEASE_DIR])
+    if "--no-open" not in sys.argv:
+        if sys.platform == 'darwin':  # macOS
+            subprocess.run(['open', RELEASE_DIR])
+        elif sys.platform == 'win32':  # Windows
+            os.startfile(RELEASE_DIR)
+        elif sys.platform.startswith('linux'):  # Linux
+            subprocess.run(['xdg-open', RELEASE_DIR])
 
 if __name__ == "__main__":
     main() 
