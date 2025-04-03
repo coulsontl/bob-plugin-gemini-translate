@@ -1,6 +1,6 @@
 {
     "identifier": "com.coulsontl.bob-plugin-gemini-translate",
-    "version": "0.1.0",
+    "version": "0.1.1",
     "category": "translate",
     "name": "Gemini翻译",
     "summary": "使用Google Gemini API进行文本翻译",
