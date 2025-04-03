@@ -75,8 +75,29 @@
 2. GitHub Actions将自动执行以下操作：
    - 根据tag更新info.json中的版本号
    - 构建插件包
-   - 在appcast.json中添加新版本信息
+   - 更新appcast.json添加新版本信息
+   - 提交修改后的文件到main分支
    - 创建GitHub Release并上传插件文件
+
+#### 配置GitHub Actions
+
+首次使用GitHub Actions自动发布功能，需要进行以下配置：
+
+1. 在GitHub仓库中创建Personal Access Token (PAT)：
+   - 访问GitHub的Settings -> Developer settings -> Personal access tokens
+   - 点击"Generate new token"（选择"Fine-grained tokens"）
+   - 为token命名（如"bob-plugin-release"）
+   - 选择仓库权限，至少需要"Contents: Read and write"权限
+   - 设置合适的过期时间
+   - 点击"Generate token"并复制生成的token
+
+2. 在仓库的Settings -> Secrets -> Actions中添加密钥：
+   - 点击"New repository secret"
+   - 名称填写"GH_PAT"
+   - 值填写第1步生成的token
+   - 点击"Add secret"保存
+
+完成以上配置后，每次推送新tag时，GitHub Actions将自动更新版本信息并提交到main分支。
 
 ### 手动构建
 

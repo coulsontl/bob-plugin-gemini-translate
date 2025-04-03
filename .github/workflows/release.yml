@@ -8,9 +8,14 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write  # 添加写内容的权限
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GH_PAT }}  # 使用存储在secrets中的PAT
 
       - name: Set up Python
         uses: actions/setup-python@v4
@@ -34,6 +39,11 @@ jobs:
           echo "$RELEASE_NOTES" >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
 
+      - name: Configure Git
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+
       - name: Update version in info.json
         run: |
           python -c "
@@ -53,6 +63,17 @@ jobs:
           # 运行构建脚本（不自动增加版本号，因为已经从tag设置）
           python build.py --no-open
 
+      - name: Commit and push changes
+        run: |
+          # 检查是否有变更需要提交
+          if [[ -n $(git status -s appcast.json info.json) ]]; then
+            git add appcast.json info.json
+            git commit -m "chore: 更新版本至 v${{ env.VERSION }}"
+            git push origin HEAD:main
+          else
+            echo "没有变更需要提交"
+          fi
+
       - name: Create Release
         id: create_release
         uses: softprops/action-gh-release@v1
@@ -64,7 +85,5 @@ jobs:
           prerelease: false
           files: |
             release/bob-plugin-gemini-translate.bobplugin
-            appcast.json
-            info.json
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }} 
