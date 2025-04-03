@@ -2,6 +2,13 @@
   "identifier": "com.coulsontl.bob-plugin-gemini-translate",
   "versions": [
     {
+      "version": "0.1.3",
+      "desc": "chore: 更新ICON",
+      "sha256": "de2f9dfc3730f1499f4182da27bec3fc1c817233dcaa165653a8bf51222c0b25",
+      "url": "https://github.com/coulsontl/bob-plugin-gemini-translate/releases/download/v0.1.3/bob-plugin-gemini-translate.bobplugin",
+      "minBobVersion": "1.8.0"
+    },
+    {
       "version": "0.1.2",
       "desc": "chore: 支持自定义模型和提示词",
       "sha256": "36d5fffe27962246259136aae1e3f09b158bd8b2c94428169f3c3cf8a9a3b0d0",
