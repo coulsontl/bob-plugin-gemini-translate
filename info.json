@@ -4,6 +4,7 @@
     "category": "translate",
     "name": "Gemini翻译",
     "summary": "使用Google Gemini API进行文本翻译",
+    "icon": "127",
     "author": "coulsontl",
     "homepage": "https://github.com/coulsontl/bob-plugin-gemini-translate",
     "appcast": "https://github.com/coulsontl/bob-plugin-gemini-translate/raw/main/appcast.json",
