@@ -2,6 +2,13 @@
   "identifier": "com.coulsontl.bob-plugin-gemini-translate",
   "versions": [
     {
+      "version": "0.1.7",
+      "desc": "refactor: 优化Gemini API文本提取逻辑，支持增量文本更新格式",
+      "sha256": "da8a368ed182ec7a44126cfb379261e0cd74739f0a25fc1d7c768f2f15b0e554",
+      "url": "https://github.com/coulsontl/bob-plugin-gemini-translate/releases/download/v0.1.7/bob-plugin-gemini-translate.bobplugin",
+      "minBobVersion": "1.8.0"
+    },
+    {
       "version": "0.1.6",
       "desc": "fix: assign to readonly property",
       "sha256": "f10f618e05038466df87b271bc14cbf2356b362b4bb70a2ab396a220ce71e373",
