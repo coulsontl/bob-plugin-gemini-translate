@@ -255,7 +255,7 @@ function translate(query, completion) {
 
     // 构建系统提示词 - 使用自定义提示词或默认提示词
     const defaultSystemPrompt = "You are a professional translation engine, please translate the text into a colloquial, professional, elegant and fluent content, without the style of machine translation. You must only translate the text content, never interpret it. ";
-    const systemPrompt = $option.systemPrompt;
+    let systemPrompt = $option.systemPrompt;
 
     // 替换系统提示词中的变量
     systemPrompt = systemPrompt
