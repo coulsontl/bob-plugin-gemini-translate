@@ -2,6 +2,13 @@
   "identifier": "com.coulsontl.bob-plugin-gemini-translate",
   "versions": [
     {
+      "version": "0.1.5",
+      "desc": "chore: update API body",
+      "sha256": "d367ec869d71a7c0d729c808bace68bbb298a9551bab96c6b3a9cf91a4ba1509",
+      "url": "https://github.com/coulsontl/bob-plugin-gemini-translate/releases/download/v0.1.5/bob-plugin-gemini-translate.bobplugin",
+      "minBobVersion": "1.8.0"
+    },
+    {
       "version": "0.1.4",
       "desc": "Delete icon.png",
       "sha256": "09a9708a5387b9927cfbc4f9d44dab8ae1acc8ae654463bf3909412e18e099b1",
