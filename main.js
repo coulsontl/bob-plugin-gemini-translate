@@ -379,12 +379,12 @@ function translate(query, completion) {
                         if (candidate.content && candidate.content.parts && candidate.content.parts.length > 0) {
                             const textPart = candidate.content.parts[0].text;
                             if (textPart) {
-                                text += textPart;
+                                text = textPart;
                             }
                         }
                         else if (candidate.delta && candidate.delta.textDelta && candidate.delta.textDelta.text) {
                             // 处理增量文本更新格式
-                            text += candidate.delta.textDelta.text;
+                            text = candidate.delta.textDelta.text;
                         }
                     }
 
