@@ -373,34 +373,19 @@ function translate(query, completion) {
                     // 提取文本内容 - 适应不同的Gemini API版本响应格式
                     let text = null;
 
-                    // 尝试提取文本 - 方式1
-                    if (parsedData.candidates &&
-                        parsedData.candidates[0] &&
-                        parsedData.candidates[0].content &&
-                        parsedData.candidates[0].content.parts &&
-                        parsedData.candidates[0].content.parts[0] &&
-                        parsedData.candidates[0].content.parts[0].text) {
-
-                        text = parsedData.candidates[0].content.parts[0].text;
-                    }
-                    // 尝试提取文本 - 方式2（新版API）
-                    else if (parsedData.candidates &&
-                        parsedData.candidates[0] &&
-                        parsedData.candidates[0].text) {
-
-                        text = parsedData.candidates[0].text;
-                    }
-                    // 尝试提取文本 - 方式3
-                    else if (parsedData.content &&
-                        parsedData.content.parts &&
-                        parsedData.content.parts[0] &&
-                        parsedData.content.parts[0].text) {
-
-                        text = parsedData.content.parts[0].text;
-                    }
-                    // 尝试提取文本 - 方式4
-                    else if (parsedData.text) {
-                        text = parsedData.text;
+                    // 处理Gemini API的流式响应格式
+                    if (parsedData.candidates && parsedData.candidates.length > 0) {
+                        const candidate = parsedData.candidates[0];
+                        if (candidate.content && candidate.content.parts && candidate.content.parts.length > 0) {
+                            const textPart = candidate.content.parts[0].text;
+                            if (textPart) {
+                                text += textPart;
+                            }
+                        }
+                        else if (candidate.delta && candidate.delta.textDelta && candidate.delta.textDelta.text) {
+                            // 处理增量文本更新格式
+                            text += candidate.delta.textDelta.text;
+                        }
                     }
 
                     if (text) {
