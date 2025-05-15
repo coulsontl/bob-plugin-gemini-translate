@@ -2,6 +2,13 @@
   "identifier": "com.coulsontl.bob-plugin-gemini-translate",
   "versions": [
     {
+      "version": "0.1.9",
+      "desc": "Update info.json",
+      "sha256": "8f231948ca47c35135b22142a61d593a4ff11734a45868080c0ba3e32320a8ef",
+      "url": "https://github.com/coulsontl/bob-plugin-gemini-translate/releases/download/v0.1.9/bob-plugin-gemini-translate.bobplugin",
+      "minBobVersion": "1.8.0"
+    },
+    {
       "version": "0.1.8",
       "desc": "fix: 修复文本赋值逻辑，确保正确处理文本内容",
       "sha256": "a5959245747cb2e5cdddcfbf6c74936c1a6f26a8ad9b87793ce34fd8601f6b54",
