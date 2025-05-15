@@ -286,6 +286,34 @@ function translate(query, completion) {
         .replace(/\$detect/g, detect)
         .replace(/\$text/g, query.text);
 
+    let otherConfigs = {};
+    // 处理推理长度
+    if ($option.thinkingBudget && $option.thinkingBudget.trim() !== "") {
+        otherConfigs = {
+            thinkingConfig: {
+                thinkingBudget: parseInt($option.thinkingBudget)
+            }
+        }
+    }
+
+    // 处理其他参数配置
+    if ($option.requestArguments && $option.requestArguments.trim() !== "") {
+        try {
+            const parsedArgs = JSON.parse($option.requestArguments);
+            // 优先使用requestArguments中的thinkingConfig
+            if (parsedArgs.thinkingConfig) {
+                otherConfigs = parsedArgs;
+            } else {
+                otherConfigs = {
+                    ...otherConfigs,
+                    ...parsedArgs
+                };
+            }
+        } catch (e) {
+            $log.error(`Invalid requestArguments: ${e.message}`);
+        }
+    }
+
     const requestBody = {
         safetySettings: [
             {
@@ -323,7 +351,9 @@ function translate(query, completion) {
         ],
         generationConfig: {
             temperature: temperature,
-            topP: topP
+            topP: topP,
+            // https://ai.google.dev/gemini-api/docs/thinking?hl=zh-cn#javascript_1
+            ...otherConfigs,
         }
     };
 
