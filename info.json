@@ -41,6 +41,10 @@
                     "value": "gemini-2.0-flash"
                 },
                 {
+                    "title": "Gemini 2.5 Flash Preview 04-17",
+                    "value": "gemini-2.5-flash-preview-04-17"
+                },
+                {
                     "title": "Gemini 2.5 Pro Exp 03-25",
                     "value": "gemini-2.5-pro-exp-03-25"
                 },
@@ -103,6 +107,28 @@
             "defaultValue": "0.95",
             "textConfig": {
                 "type": "visible"
+            }
+        },
+        {
+            "identifier": "thinkingBudget",
+            "type": "text",
+            "title": "推理长度",
+            "desc": "模型在思考过程中可使用的思考令牌数量",
+            "defaultValue": "0",
+            "textConfig": {
+                "type": "visible"
+            }
+        },
+        {
+            "identifier": "requestArguments",
+            "type": "text",
+            "title": "其他参数",
+            "desc": "自定义其他请求入参，如果KEY同名上面的参数会被覆盖",
+            "defaultValue": "",
+            "textConfig": {
+                "type": "visible",
+                "height": 100,
+                "placeholderText": "{\n    \"thinkingConfig\": {\n        \"thinkingBudget\": 0\n    }\n}"
             }
         }
     ]
